@@ -1,10 +1,9 @@
-# Travel Blog
+# Michal's Personal Blog
 
 A small, fast personal blog with a private admin area for writing posts in
-Markdown and uploading photos. Built to look like a clean, early-2000s
-hand-made website, but responsive and modern under the hood.
+Markdown and uploading photos. Built to look simple and a little retro, but responsive and modern under the hood.
 
-**Stack:** Next.js (App Router) · TypeScript · hand-written SCSS · Supabase
+**Stack:** Next.js (App Router) · TypeScript · SCSS · Supabase
 (auth + Postgres + Storage) · deploys free on Vercel.
 
 ---
