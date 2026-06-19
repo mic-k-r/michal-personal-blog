@@ -1,0 +1,290 @@
+// ============================================================
+//  Global styles — a clean, early-2000s "hand-built HTML" look.
+//  Hand-written SCSS, flexbox layout, fluid type via clamp().
+// ============================================================
+
+// ---- Design tokens -----------------------------------------
+$page-bg:      #e7e6e1;   // soft gray behind the content panel
+$panel-bg:     #ffffff;   // the white "page" you read on
+$ink:          #1a1a1a;   // body text
+$muted:        #555555;   // dates, captions
+$rule:         #999999;   // hairline borders / <hr>
+$panel-border: #888888;
+
+$link:         #0000ee;   // classic unvisited blue
+$link-visited: #551a8b;   // classic visited purple
+$link-hover:   #cc0000;   // red on hover
+
+$bevel-face:   #d4d0c8;   // Win9x-ish button face
+$bevel-light:  #ffffff;
+$bevel-dark:   #808080;
+
+$serif:  Georgia, 'Times New Roman', Times, serif;
+$sans:   Verdana, Geneva, Tahoma, sans-serif;
+$mono:   'Courier New', Courier, monospace;
+
+$content-width: 720px;
+
+// ---- Reset-ish ---------------------------------------------
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  // Fluid base size: never smaller than 15px, never larger than 17px.
+  font-size: clamp(15px, 0.9rem + 0.2vw, 17px);
+}
+
+body {
+  margin: 0;
+  background: $page-bg;
+  color: $ink;
+  font-family: $sans;
+  line-height: 1.6;
+}
+
+// ---- Links -------------------------------------------------
+a {
+  color: $link;
+  text-decoration: underline;
+  &:visited { color: $link-visited; }
+  &:hover,
+  &:focus { color: $link-hover; }
+}
+
+// ---- Layout ------------------------------------------------
+// A single centered column — the "page" sits on a gray desktop.
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.panel {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: $content-width;
+  margin: 1.5rem auto;
+  padding: 1.75rem 2rem;
+  background: $panel-bg;
+  border: 1px solid $panel-border;
+}
+
+@media (max-width: 640px) {
+  .panel {
+    margin: 0;
+    border-left: none;
+    border-right: none;
+    padding: 1.25rem 1.1rem;
+  }
+}
+
+// ---- Site header / footer ----------------------------------
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid $ink;
+
+  .site-title {
+    margin: 0;
+    font-family: $serif;
+    font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.3rem);
+    font-weight: 700;
+    a { color: $ink; text-decoration: none; }
+    a:hover { color: $link-hover; }
+  }
+
+  .site-tagline {
+    margin: 0;
+    color: $muted;
+    font-style: italic;
+    font-family: $serif;
+  }
+
+  nav {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+.site-footer {
+  flex-shrink: 0;
+  max-width: $content-width;
+  margin: 0 auto 2rem;
+  padding: 0 2rem;
+  color: $muted;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+// ---- Headings ----------------------------------------------
+h1, h2, h3, h4 {
+  font-family: $serif;
+  line-height: 1.25;
+  color: $ink;
+}
+
+// ---- Horizontal rule ---------------------------------------
+hr {
+  border: none;
+  border-top: 1px solid $rule;
+  margin: 1.75rem 0;
+}
+
+// ---- Buttons & inputs (beveled, retro) ---------------------
+%bevel {
+  border-style: solid;
+  border-width: 2px;
+  border-color: $bevel-light $bevel-dark $bevel-dark $bevel-light;
+  background: $bevel-face;
+}
+
+.btn,
+button[type='submit'],
+button.btn {
+  @extend %bevel;
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  font-family: $sans;
+  font-size: 0.9rem;
+  color: $ink;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:active {
+    // press it "in"
+    border-color: $bevel-dark $bevel-light $bevel-light $bevel-dark;
+  }
+
+  &:disabled {
+    color: $muted;
+    cursor: default;
+    opacity: 0.7;
+  }
+}
+
+.btn--danger { color: #a00000; }
+
+input[type='text'],
+input[type='email'],
+input[type='password'],
+textarea {
+  width: 100%;
+  padding: 0.5rem;
+  font-family: $sans;
+  font-size: 0.95rem;
+  color: $ink;
+  background: #fff;
+  border: 2px solid;
+  border-color: $bevel-dark $bevel-light $bevel-light $bevel-dark;
+}
+
+textarea {
+  font-family: $mono;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.field { margin-bottom: 1.25rem; }
+
+// ---- Focus visibility (accessibility floor) ----------------
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid $link;
+  outline-offset: 1px;
+}
+
+// ---- Rendered Markdown -------------------------------------
+.markdown {
+  h1, h2, h3 { margin-top: 1.75rem; }
+  h2 { border-bottom: 1px solid $rule; padding-bottom: 0.2rem; }
+
+  p { margin: 1rem 0; }
+
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1.25rem auto;
+    border: 1px solid $rule;
+    padding: 4px;
+    background: #fff;
+  }
+
+  blockquote {
+    margin: 1.25rem 0;
+    padding: 0.25rem 1rem;
+    border-left: 4px solid $rule;
+    color: $muted;
+    font-style: italic;
+  }
+
+  code {
+    font-family: $mono;
+    background: #f0f0f0;
+    padding: 0.1rem 0.3rem;
+  }
+
+  pre {
+    overflow-x: auto;
+    background: #f0f0f0;
+    padding: 0.75rem 1rem;
+    border: 1px solid $rule;
+    code { background: none; padding: 0; }
+  }
+
+  ul, ol { padding-left: 1.5rem; }
+  li { margin: 0.3rem 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.25rem 0;
+  }
+  th, td {
+    border: 1px solid $rule;
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+  }
+  th { background: #f0f0f0; }
+}
+
+// ---- Small utilities ---------------------------------------
+.muted { color: $muted; }
+.stack > * + * { margin-top: 1rem; }
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+.notice {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid $rule;
+  background: #fff8dc; // pale yellow "post-it"
+  font-size: 0.9rem;
+}
+.error {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #c00;
+  background: #ffecec;
+  color: #a00000;
+  font-size: 0.9rem;
+}
