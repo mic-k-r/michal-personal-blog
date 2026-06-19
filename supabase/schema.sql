@@ -13,6 +13,14 @@ create table if not exists public.posts (
   updated_at timestamptz not null default now()
 );
 
+-- ---- Table privileges (Data API exposure) ------------------
+-- Grant the API roles access to the table. This is required because
+-- "Automatically expose new tables" is turned off; without it you'll get
+-- "permission denied for table posts" even with the policies below.
+-- Note: privileges are the first gate; the RLS policies below are the second.
+grant select on public.posts to anon, authenticated;
+grant insert, update, delete on public.posts to authenticated;
+
 alter table public.posts enable row level security;
 
 -- Anyone can read posts (it's a public blog).
