@@ -228,6 +228,16 @@ button.btn {
   }
 }
 
+.btn--primary {
+  background: $ink;
+  color: $paper;
+  border-color: $ink;
+  &:hover {
+    background: #000;
+    color: $paper;
+  }
+}
+
 // ---- Forms -------------------------------------------------
 label {
   display: block;
@@ -394,6 +404,32 @@ textarea:focus-visible {
   background: $accent-tint;
   color: $accent-deep;
   font-size: 0.9rem;
+}
+
+// ---- Modal (native <dialog>) -------------------------------
+.modal {
+  width: min(92vw, 30rem);
+  margin: auto;            // center in the viewport
+  padding: 0;              // padding lives on the inner body
+  border: 1px solid $rule-strong;
+  border-radius: $radius;
+  background: $surface;
+  color: $ink;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+  }
+}
+
+.modal__body {
+  padding: 1.6rem 1.6rem 1.3rem;
+
+  h3 {
+    margin: 0 0 0.5rem;
+    font-family: $display;
+  }
+  p { margin: 0 0 1.4rem; }
 }
 
 // ---- Motion preference -------------------------------------
