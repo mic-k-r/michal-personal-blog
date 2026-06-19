@@ -1,61 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap');
+
 // ============================================================
-//  Global styles — a clean, early-2000s "hand-built HTML" look.
-//  Hand-written SCSS, flexbox layout, fluid type via clamp().
+//  Global styles — editorial & eye-catching.
+//  One bold signature (the red Fraunces masthead) over a quiet,
+//  highly readable layout. Pure stylesheet: no markup changes.
 // ============================================================
 
 // ---- Design tokens -----------------------------------------
-$page-bg:      #e7e6e1;   // soft gray behind the content panel
-$panel-bg:     #ffffff;   // the white "page" you read on
-$ink:          #1a1a1a;   // body text
-$muted:        #555555;   // dates, captions
-$rule:         #999999;   // hairline borders / <hr>
-$panel-border: #888888;
+$paper:        #fbf9f4;   // warm paper background
+$surface:      #ffffff;   // inputs / raised bits
+$ink:          #1b1a17;   // near-black text
+$muted:        #756f63;   // warm gray for meta / captions
+$rule:         #e6e0d4;   // hairline borders
+$rule-strong:  #cfc7b6;
 
-$link:         #0000ee;   // classic unvisited blue
-$link-visited: #551a8b;   // classic visited purple
-$link-hover:   #cc0000;   // red on hover
+$accent:       #e5311c;   // vivid red — the signature
+$accent-deep:  #c12717;   // slightly deeper, for body links (contrast)
+$accent-tint:  #fbe4df;   // pale red wash
 
-$bevel-face:   #d4d0c8;   // Win9x-ish button face
-$bevel-light:  #ffffff;
-$bevel-dark:   #808080;
+$display: 'Fraunces', Georgia, 'Times New Roman', serif;
+$body:    'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+$mono:    ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
 
-$serif:  Georgia, 'Times New Roman', Times, serif;
-$sans:   Verdana, Geneva, Tahoma, sans-serif;
-$mono:   'Courier New', Courier, monospace;
-
-$content-width: 720px;
+$measure: 46rem;          // reading column width
+$radius:  8px;
 
 // ---- Reset-ish ---------------------------------------------
 *,
 *::before,
-*::after {
-  box-sizing: border-box;
-}
+*::after { box-sizing: border-box; }
 
 html {
-  // Fluid base size: never smaller than 15px, never larger than 17px.
-  font-size: clamp(15px, 0.9rem + 0.2vw, 17px);
+  font-size: clamp(16px, 0.95rem + 0.25vw, 18px);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  background: $page-bg;
+  background: $paper;
   color: $ink;
-  font-family: $sans;
-  line-height: 1.6;
+  font-family: $body;
+  line-height: 1.7;
+  font-feature-settings: 'kern';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: $accent;
+  color: #fff;
 }
 
 // ---- Links -------------------------------------------------
 a {
-  color: $link;
+  color: $accent-deep;
   text-decoration: underline;
-  &:visited { color: $link-visited; }
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba($accent-deep, 0.35);
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+
+  &:visited { color: $accent-deep; }
   &:hover,
-  &:focus { color: $link-hover; }
+  &:focus {
+    color: $accent;
+    text-decoration-color: currentColor;
+  }
 }
 
 // ---- Layout ------------------------------------------------
-// A single centered column — the "page" sits on a gray desktop.
 .layout {
   display: flex;
   flex-direction: column;
@@ -65,226 +78,328 @@ a {
 .panel {
   flex: 1 0 auto;
   width: 100%;
-  max-width: $content-width;
-  margin: 1.5rem auto;
-  padding: 1.75rem 2rem;
-  background: $panel-bg;
-  border: 1px solid $panel-border;
+  max-width: $measure;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 2rem;
 }
 
-@media (max-width: 640px) {
-  .panel {
-    margin: 0;
-    border-left: none;
-    border-right: none;
-    padding: 1.25rem 1.1rem;
-  }
-}
-
-// ---- Site header / footer ----------------------------------
+// ---- Masthead ----------------------------------------------
 .site-header {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 0.5rem 1rem;
-  padding-bottom: 0.75rem;
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid $ink;
+  gap: 0.75rem 1.5rem;
+  padding-bottom: 1.1rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid $rule-strong;
 
   .site-title {
     margin: 0;
-    font-family: $serif;
-    font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.3rem);
+    font-family: $display;
     font-weight: 700;
-    a { color: $ink; text-decoration: none; }
-    a:hover { color: $link-hover; }
+    font-size: clamp(2.4rem, 1.5rem + 4.2vw, 4rem);
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    font-optical-sizing: auto;
+    font-variation-settings: 'SOFT' 0, 'WONK' 1;
+
+    a {
+      color: $accent;
+      text-decoration: none;
+      &:hover { color: $accent-deep; }
+    }
   }
 
   .site-tagline {
-    margin: 0;
-    color: $muted;
+    margin: 0.35rem 0 0;
+    font-family: $display;
     font-style: italic;
-    font-family: $serif;
+    font-weight: 400;
+    font-size: clamp(0.95rem, 0.85rem + 0.4vw, 1.15rem);
+    color: $muted;
   }
 
   nav {
     display: flex;
-    gap: 1rem;
-    font-size: 0.85rem;
+    gap: 1.25rem;
+    padding-bottom: 0.3rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+
+    a {
+      position: relative;
+      color: $ink;
+      text-decoration: none;
+      padding-bottom: 2px;
+      background-image: linear-gradient($accent, $accent);
+      background-size: 0% 2px;
+      background-position: 0 100%;
+      background-repeat: no-repeat;
+      transition: background-size 0.2s ease, color 0.15s ease;
+
+      &:hover {
+        color: $accent;
+        background-size: 100% 2px;
+      }
+    }
   }
 }
 
+// ---- Footer ------------------------------------------------
 .site-footer {
   flex-shrink: 0;
-  max-width: $content-width;
-  margin: 0 auto 2rem;
-  padding: 0 2rem;
+  width: 100%;
+  max-width: $measure;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 2.5rem;
   color: $muted;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   text-align: center;
+
+  hr {
+    margin-bottom: 1.25rem;
+  }
 }
 
 // ---- Headings ----------------------------------------------
 h1, h2, h3, h4 {
-  font-family: $serif;
-  line-height: 1.25;
+  font-family: $display;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.018em;
   color: $ink;
+  font-optical-sizing: auto;
 }
 
-// ---- Horizontal rule ---------------------------------------
+h1 { font-size: clamp(1.9rem, 1.4rem + 2.2vw, 2.8rem); }
+h2 { font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem); }
+h3 { font-size: 1.3rem; }
+
+// ---- Rule --------------------------------------------------
 hr {
   border: none;
   border-top: 1px solid $rule;
-  margin: 1.75rem 0;
+  margin: 2.5rem 0;
 }
 
-// ---- Buttons & inputs (beveled, retro) ---------------------
-%bevel {
-  border-style: solid;
-  border-width: 2px;
-  border-color: $bevel-light $bevel-dark $bevel-dark $bevel-light;
-  background: $bevel-face;
-}
-
+// ---- Buttons -----------------------------------------------
 .btn,
 button[type='submit'],
 button.btn {
-  @extend %bevel;
-  display: inline-block;
-  padding: 0.4rem 1rem;
-  font-family: $sans;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.1rem;
+  font-family: $body;
   font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.2;
   color: $ink;
   text-decoration: none;
+  background: $surface;
+  border: 1px solid $ink;
+  border-radius: $radius;
   cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+    transform 0.05s ease;
 
-  &:active {
-    // press it "in"
-    border-color: $bevel-dark $bevel-light $bevel-light $bevel-dark;
+  &:hover {
+    background: $ink;
+    color: $paper;
   }
+  &:active { transform: translateY(1px); }
 
   &:disabled {
     color: $muted;
+    background: $surface;
+    border-color: $rule-strong;
     cursor: default;
-    opacity: 0.7;
+    transform: none;
   }
 }
 
-.btn--danger { color: #a00000; }
+.btn--danger {
+  color: $accent-deep;
+  border-color: $accent-deep;
+  &:hover {
+    background: $accent-deep;
+    color: #fff;
+  }
+}
+
+// ---- Forms -------------------------------------------------
+label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: $ink;
+}
 
 input[type='text'],
 input[type='email'],
 input[type='password'],
 textarea {
   width: 100%;
-  padding: 0.5rem;
-  font-family: $sans;
+  padding: 0.6rem 0.75rem;
+  font-family: $body;
   font-size: 0.95rem;
   color: $ink;
-  background: #fff;
-  border: 2px solid;
-  border-color: $bevel-dark $bevel-light $bevel-light $bevel-dark;
+  background: $surface;
+  border: 1px solid $rule-strong;
+  border-radius: $radius;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &::placeholder { color: $muted; }
+
+  &:focus {
+    outline: none;
+    border-color: $accent;
+    box-shadow: 0 0 0 3px rgba($accent, 0.15);
+  }
 }
 
 textarea {
   font-family: $mono;
-  line-height: 1.5;
+  font-size: 0.9rem;
+  line-height: 1.6;
   resize: vertical;
 }
 
-label {
-  display: block;
-  margin-bottom: 0.3rem;
-  font-weight: 700;
+input[type='file'] {
+  font-family: $body;
   font-size: 0.85rem;
+  color: $muted;
 }
 
-.field { margin-bottom: 1.25rem; }
+.field { margin-bottom: 1.5rem; }
 
-// ---- Focus visibility (accessibility floor) ----------------
+// ---- Focus visibility --------------------------------------
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid $link;
-  outline-offset: 1px;
+  outline: 2px solid $accent;
+  outline-offset: 2px;
 }
 
 // ---- Rendered Markdown -------------------------------------
 .markdown {
-  h1, h2, h3 { margin-top: 1.75rem; }
-  h2 { border-bottom: 1px solid $rule; padding-bottom: 0.2rem; }
+  font-size: 1.05rem;
 
-  p { margin: 1rem 0; }
+  h1, h2, h3 { margin: 2.25rem 0 0.75rem; }
+  h2 {
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid $rule;
+  }
+
+  p { margin: 1.1rem 0; }
 
   img {
     display: block;
-    max-width: 100%;
+    width: 100%;
     height: auto;
-    margin: 1.25rem auto;
-    border: 1px solid $rule;
-    padding: 4px;
-    background: #fff;
+    margin: 2rem auto;
+    border-radius: $radius;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.08),
+      0 12px 28px rgba(0, 0, 0, 0.07);
   }
 
   blockquote {
-    margin: 1.25rem 0;
-    padding: 0.25rem 1rem;
-    border-left: 4px solid $rule;
-    color: $muted;
+    margin: 1.5rem 0;
+    padding: 0.4rem 1.25rem;
+    border-left: 3px solid $accent;
+    background: $accent-tint;
+    border-radius: 0 $radius $radius 0;
+    color: #5d3b35;
     font-style: italic;
+
+    p { margin: 0.4rem 0; }
   }
 
   code {
     font-family: $mono;
-    background: #f0f0f0;
-    padding: 0.1rem 0.3rem;
+    font-size: 0.88em;
+    background: rgba($ink, 0.05);
+    padding: 0.12em 0.38em;
+    border-radius: 4px;
   }
 
   pre {
     overflow-x: auto;
-    background: #f0f0f0;
-    padding: 0.75rem 1rem;
-    border: 1px solid $rule;
-    code { background: none; padding: 0; }
+    margin: 1.5rem 0;
+    padding: 1rem 1.15rem;
+    background: $ink;
+    color: #f3efe6;
+    border-radius: $radius;
+    line-height: 1.55;
+
+    code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      font-size: 0.85rem;
+    }
   }
 
   ul, ol { padding-left: 1.5rem; }
-  li { margin: 0.3rem 0; }
+  li { margin: 0.35rem 0; }
+  li::marker { color: $accent; }
 
   table {
     width: 100%;
     border-collapse: collapse;
-    margin: 1.25rem 0;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
   }
   th, td {
-    border: 1px solid $rule;
-    padding: 0.4rem 0.6rem;
+    padding: 0.5rem 0.7rem;
     text-align: left;
+    border-bottom: 1px solid $rule;
   }
-  th { background: #f0f0f0; }
+  th {
+    font-weight: 600;
+    border-bottom: 2px solid $rule-strong;
+  }
 }
 
-// ---- Small utilities ---------------------------------------
+// ---- Utilities ---------------------------------------------
 .muted { color: $muted; }
-.stack > * + * { margin-top: 1rem; }
+
+.stack > * + * { margin-top: 1.1rem; }
+
 .row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
   align-items: center;
 }
+
 .notice {
-  padding: 0.6rem 0.9rem;
-  border: 1px solid $rule;
-  background: #fff8dc; // pale yellow "post-it"
+  padding: 0.7rem 1rem;
+  border: 1px solid $rule-strong;
+  border-left: 3px solid $accent;
+  border-radius: $radius;
+  background: $surface;
   font-size: 0.9rem;
 }
+
 .error {
-  padding: 0.6rem 0.9rem;
-  border: 1px solid #c00;
-  background: #ffecec;
-  color: #a00000;
+  padding: 0.7rem 1rem;
+  border: 1px solid rgba($accent, 0.4);
+  border-radius: $radius;
+  background: $accent-tint;
+  color: $accent-deep;
   font-size: 0.9rem;
+}
+
+// ---- Motion preference -------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
 }

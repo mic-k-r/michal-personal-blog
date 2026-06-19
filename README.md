@@ -114,6 +114,40 @@ you can reach `/admin`.
 
 ---
 
+## 7. Switching to a custom domain (later)
+
+You can launch on the free `<project-name>.vercel.app` URL now and move to a
+custom domain (e.g. `michaltravels.com`) any time — nothing here forces an
+early decision. When you're ready, do these three things:
+
+1. **Add the domain in Vercel.** Buy the domain from any registrar, then in the
+   Vercel project go to **Settings → Domains**, add it, and follow the DNS
+   records Vercel shows you. HTTPS is set up automatically. Your old
+   `.vercel.app` address keeps working and redirects to the new one, so
+   existing links don't break.
+
+2. **Tell Supabase about the new URL.** In the Supabase dashboard, go to
+   **Authentication → URL Configuration** and add the new domain to the Site
+   URL / redirect allow-list so admin login keeps working on the new address.
+   Easy to forget; takes two minutes.
+
+3. **Update `metadataBase` for share previews.** In
+   [`src/app/layout.tsx`](./src/app/layout.tsx), set `metadata.metadataBase` to
+   your final URL so social/link-preview cards use correct absolute links:
+
+   ```ts
+   export const metadata: Metadata = {
+     metadataBase: new URL('https://your-domain.com'),
+     title: site.title,
+     description: site.tagline,
+   }
+   ```
+
+   Commit and push; Vercel rebuilds automatically. (Skip this until you know
+   your final URL — it only affects link previews, not the site itself.)
+
+---
+
 ## Project structure
 
 ```

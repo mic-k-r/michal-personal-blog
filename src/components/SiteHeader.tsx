@@ -1,7 +1,16 @@
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/server'
 import { site } from '@/lib/site'
 
-export default function SiteHeader() {
+export default async function SiteHeader() {
+  // Only show the Admin link when *you* are signed in. This is cosmetic —
+  // the real protection is the middleware + RLS — so a lightweight
+  // cookie-based session check (no extra network round-trip) is enough.
+  const supabase = await createClient()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
   return (
     <header className="site-header">
       <div>
@@ -12,8 +21,9 @@ export default function SiteHeader() {
       </div>
       <nav>
         <Link href="/">Home</Link>
-        <Link href="/admin">Admin</Link>
+        {session && <Link href="/admin">Admin</Link>}
       </nav>
     </header>
   )
 }
+
